@@ -55,12 +55,25 @@ func RenderToStringT(name string, tpl *template.Template, data interface{}) (r s
 	return
 }
 
+// Using the same template file name for both html and mobile.
 func ForRender(env Env, name string, data interface{}) {
 	if IsFromMobile(env.Request().UserAgent()) && !strings.HasPrefix(name, "mobiles_layout/") {
 		arr := strings.Split(name, "/")
 		name = "mobiles_layout/" + arr[len(arr)-1]
 	}
 	env[TEMPLATE_NAME_KEY] = name
+	env[TEMPLATE_DATA_KEY] = data
+}
+
+// Can provide both html and mobile template names.
+// Use this when they are different names.
+func ForRenderWithMobileTemplate(env Env, htmlTmpl string, mobileTmpl string, data interface{}) {
+	if IsFromMobile(env.Request().UserAgent()) {
+		env[TEMPLATE_NAME_KEY] = mobileTmpl
+	} else {
+		env[TEMPLATE_NAME_KEY] = htmlTmpl
+	}
+
 	env[TEMPLATE_DATA_KEY] = data
 }
 
