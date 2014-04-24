@@ -35,7 +35,10 @@ func MakeLayout(tpl *template.Template, name string, ldp LayoutDataProvider) Mid
 		b := bytes.NewBuffer([]byte{})
 		tempName := name
 		if IsFromMobile(env.Request().UserAgent()) && !strings.HasPrefix(tempName, "mobiles_layout/") {
-			if tempName != "main" {
+			switch tempName {
+			case "main":
+			case "setup":
+			default:
 				tempName = "home"
 			}
 			tempName = "mobiles_layout/" + tempName
